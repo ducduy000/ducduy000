@@ -54,14 +54,17 @@ static EventGroupHandle_t s_wifi_event_group;
 // Dòng mã static EventGroupHandle_t s_wifi_event_group; 
 khai báo một biến tĩnh (static) có tên là s_wifi_event_group, được sử dụng để lưu trữ handle của một event group trong 
 FreeRTOS.
-//Trong các ứng dụng ESP32, s_wifi_event_group thường được sử dụng để đồng bộ hóa các sự kiện liên quan đến Wi-Fi, như kết nối hoặc ngắt kết nối, chờ IP được gán từ DHCP, v.v. Các bit trong event group có thể được dùng để theo dõi trạng thái của các sự kiện này.
+//Trong các ứng dụng ESP32, s_wifi_event_group thường được sử dụng để đồng bộ hóa các sự kiện liên quan đến Wi-Fi,
+ như kết nối hoặc ngắt kết nối, chờ IP được gán từ DHCP, v.v. Các bit trong event group có thể được dùng để theo dõi trạng thái của các sự kiện này.
 
 ``` 
 
 ```bash 
 static const char *TAG = "wifi station";
 //Dòng mã static const char *TAG = "wifi station"; khai báo một biến con trỏ chuỗi TAG với giá trị là "wifi station".
-//Logging: Biến TAG thường được sử dụng với hệ thống ghi log (logging) trong ESP-IDF. ESP-IDF cung cấp một số hàm logging như ESP_LOGI, ESP_LOGW, ESP_LOGE, v.v. để in thông tin, cảnh báo, và lỗi. Biến TAG được truyền vào các hàm này để cho biết nguồn gốc của thông điệp log, giúp dễ dàng theo dõi và gỡ lỗi.
+//Logging: Biến TAG thường được sử dụng với hệ thống ghi log (logging) trong ESP-IDF. ESP-IDF cung cấp
+một số hàm logging như ESP_LOGI, ESP_LOGW, ESP_LOGE, v.v. để in thông tin, cảnh báo, và lỗi.
+Biến TAG được truyền vào các hàm này để cho biết nguồn gốc của thông điệp log, giúp dễ dàng theo dõi và gỡ lỗi.
 ```
 ```bash 
 static int s_retry_num = 0; 
