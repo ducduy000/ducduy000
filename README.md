@@ -115,7 +115,8 @@ void wifi_init_sta(void) // khoi tao wifi o che do station khởi tạo wifi ở
     ESP_ERROR_CHECK(esp_netif_init()); // khởi tạo lwip: giao thức quản lí tất cả liên quan đến kết nối mạng
     // là ngăn xếp TCP/IP, được dùng để thực hiện các giao thức khác nhau là TCP UDP DHCP etc
 
-    ESP_ERROR_CHECK(esp_event_loop_create_default());// tạo một vòng lặp sự kiện để cho hệ thống gửi các sự kiện về tác vụ sự kiện
+    ESP_ERROR_CHECK(esp_event_loop_create_default());// tạo một vòng lặp sự kiện để cho hệ thống gửi các sự kiện về
+tác vụ sự kiện
     esp_netif_create_default_wifi_sta(); // tạo giao diện mạng wifi mặc định chế độ station
     // 2 dòng dưới để khởi tạo wifi rồi cung cấp dữ liệu cho wifi driver, trách nhiệm là khởi tạo tác vụ wifi
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT(); // cấu hình khởi tạo wifi mặc định
