@@ -185,4 +185,19 @@ ESP32 sẽ ghi log thông tin về SSID và mật khẩu của mạng Wi-Fi mà 
 thì in ra thông báo về sự kiên bất thường
     }
 }
+
+void app_main(void)
+{
+    //Initialize NVS 
+    // NVS là 1 hệ thống lưu trữ tạm thời, cho phép bạn lưu trữ dữ liệu trên flash bộ nhớ của esp 32 không bị mất khi tắt thiết bị
+    esp_err_t ret = nvs_flash_init(); // khởi tạo hệ thống lưu trữ không thay đổi
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+      ESP_ERROR_CHECK(nvs_flash_erase()); //nếu không có trong hoặc đã có version khác thì xóa
+      ret = nvs_flash_init(); //tạo lại NVS mới
+    }
+    ESP_ERROR_CHECK(ret); // check lỗi
+
+    ESP_LOGI(TAG, "ESP_WIFI_MODE_STA"); // ghi nhật kí (lỗi hoặc thông tin)
+    wifi_init_sta();
+}
 ```
