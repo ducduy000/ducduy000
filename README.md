@@ -137,4 +137,52 @@ cụ thể là event handler sẽ xử lý sự kiện liên quan đến việc 
                                                         &event_handler,
                                                         NULL,
                                                         &instance_got_ip));
+wifi_config_t wifi_config = { // đăng nhập Wifi cho ESP32
+        .sta = {
+            .ssid = EXAMPLE_ESP_WIFI_SSID,
+            .password = EXAMPLE_ESP_WIFI_PASS,
+            /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (password phải đạt tiêu chuẩn WPA2).
+             * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
+             * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
+             * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
+             */
+            .threshold.authmode = ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD,
+            .sae_pwe_h2e = ESP_WIFI_SAE_MODE,
+            .sae_h2e_identifier = EXAMPLE_H2E_IDENTIFIER,
+        },
+    };
+
+ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) ); // thực hiện việc cài đặt chế độ hoạt động của Wi-Fi trên ESP32 và
+kiểm tra lỗi để đảm bảo rằng việc cài đặt này thành công.
+    // 2 dòng dưới gán tài khoản mật khẩu wifi, làm wifi driver được cấu hình với thông tin đăng nhập mạng và wifi mode
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
+    // khởi tạo sau khi đã được cấu hình chỉ định
+    ESP_ERROR_CHECK(esp_wifi_start() );
+    // hoàn thành khởi tạo chế độ wifi station, in ra
+    ESP_LOGI(TAG, "wifi_init_sta finished.");
+
+
+    /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
+     * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
+    EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
+            WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
+            pdFALSE,
+            pdFALSE,
+            portMAX_DELAY); // hàm này kiểm tra kết nối được hay không được thì in ra cả passs và id
+            // không được thì cũng in ra cả pass va id
+
+    /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
+     * happened. */
+    if (bits & WIFI_CONNECTED_BIT) { // Nếu thiết bị đã kết nối thành công,
+ESP32 sẽ ghi log thông tin về SSID và mật khẩu của mạng Wi-Fi mà nó đã kết nối.
+        ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
+                 EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+    } else if (bits & WIFI_FAIL_BIT) { // tương tự như trên
+        ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
+                 EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+    } else {
+        ESP_LOGE(TAG, "UNEXPECTED EVENT"); // không phải 2 trường hợp trên
+thì in ra thông báo về sự kiên bất thường
+    }
+}
 ```
