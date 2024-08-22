@@ -107,7 +107,7 @@ Khi Wi-Fi bị ngắt kết nối (WIFI_EVENT_STA_DISCONNECTED), hàm cũng gọ
 }
 ```
 ```bash 
-void wifi_init_sta(void) // khoi tao wifi o che do station khởi tạo wifi ở chế độ station
+void wifi_init_sta(void) // khởi tạo wifi ở chế độ station
 {
     s_wifi_event_group = xEventGroupCreate(); // tạo freeRTOS nhóm sự kiện để quản lí trạng thái kết nối
     // hàm ESP_ERROR_CHECK check lỗi hoặc không lỗi, nếu nó kiểm tra mà không trả về  
