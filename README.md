@@ -55,7 +55,8 @@ static EventGroupHandle_t s_wifi_event_group;
 khai báo một biến tĩnh (static) có tên là s_wifi_event_group, được sử dụng để lưu trữ handle của một event group trong 
 FreeRTOS.
 //Trong các ứng dụng ESP32, s_wifi_event_group thường được sử dụng để đồng bộ hóa các sự kiện liên quan đến Wi-Fi,
- như kết nối hoặc ngắt kết nối, chờ IP được gán từ DHCP, v.v. Các bit trong event group có thể được dùng để theo dõi trạng thái của các sự kiện này.
+ như kết nối hoặc ngắt kết nối, chờ IP được gán từ DHCP, v.v.
+Các bit trong event group có thể được dùng để theo dõi trạng thái của các sự kiện này.
 
 ``` 
 
