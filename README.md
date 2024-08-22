@@ -106,3 +106,34 @@ Khi Wi-Fi bị ngắt kết nối (WIFI_EVENT_STA_DISCONNECTED), hàm cũng gọ
     }
 }
 ```
+```bash 
+void wifi_init_sta(void) // khoi tao wifi o che do station khởi tạo wifi ở chế độ station
+{
+    s_wifi_event_group = xEventGroupCreate(); // tạo freeRTOS nhóm sự kiện để quản lí trạng thái kết nối
+    // hàm ESP_ERROR_CHECK check lỗi hoặc không lỗi, nếu nó kiểm tra mà không trả về  
+    // ESP_OK thì xác nhận và ghi lại thông tin đã xác nhận
+    ESP_ERROR_CHECK(esp_netif_init()); // khởi tạo lwip: giao thức quản lí tất cả liên quan đến kết nối mạng
+    // là ngăn xếp TCP/IP, được dùng để thực hiện các giao thức khác nhau là TCP UDP DHCP etc
+
+    ESP_ERROR_CHECK(esp_event_loop_create_default());// tạo một vòng lặp sự kiện để cho hệ thống gửi các sự kiện về tác vụ sự kiện
+    esp_netif_create_default_wifi_sta(); // tạo giao diện mạng wifi mặc định chế độ station
+    // 2 dòng dưới để khởi tạo wifi rồi cung cấp dữ liệu cho wifi driver, trách nhiệm là khởi tạo tác vụ wifi
+    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT(); // cấu hình khởi tạo wifi mặc định
+    ESP_ERROR_CHECK(esp_wifi_init(&cfg)); // khởi tạo wifi với cấu hình mặc định
+    
+    esp_event_handler_instance_t instance_any_id; // Handle instance_any_id giúp bạn quản lý việc đăng ký
+và hủy đăng ký event handler một cách rõ ràng và có tổ chức. 
+    esp_event_handler_instance_t instance_got_ip; //  Biến này được sử dụng để lưu trữ handle của một event handler đã đăng ký,
+cụ thể là event handler sẽ xử lý sự kiện liên quan đến việc thiết bị nhận được địa chỉ IP 
+    // 2 hàm dưới để đăng kí các sự kiện cần xử lí, như wifi events và ip events
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
+                                                        ESP_EVENT_ANY_ID,
+                                                        &event_handler,
+                                                        NULL,
+                                                        &instance_any_id));
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT,
+                                                        IP_EVENT_STA_GOT_IP,
+                                                        &event_handler,
+                                                        NULL,
+                                                        &instance_got_ip));
+```
